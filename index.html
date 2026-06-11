@@ -710,18 +710,41 @@ Submitted via aristotlesgardenma@gmail.com
     btn.textContent = 'Sending…';
 
     const fd = new FormData(this);
-    const subject = encodeURIComponent(`Pre-Registration: ${fd.get('child_first')} ${fd.get('child_last')}`);
-    const body = encodeURIComponent(buildEmailBody(this));
-    const mailtoLink = `mailto:aristotlesgardenma@gmail.com?subject=${subject}&body=${body}`;
+    const profiles = [...this.querySelectorAll('input[name="profile"]:checked')].map(c => c.value).join(', ');
 
-    // Open mailto (works on most devices)
-    window.location.href = mailtoLink;
+    // Build flat data object for Formspree
+    const data = {
+      child_name: `${fd.get('child_first')} ${fd.get('child_last')}`,
+      child_age: fd.get('child_age'),
+      child_grade: fd.get('child_grade'),
+      learning_profile: profiles,
+      enrollment_type: fd.get('enrollment'),
+      parent_name: `${fd.get('parent_first')} ${fd.get('parent_last')}`,
+      email: fd.get('email'),
+      phone: fd.get('phone') || 'Not provided',
+      referral: fd.get('referral'),
+      notes: fd.get('notes') || 'None',
+      _subject: `Pre-Registration: ${fd.get('child_first')} ${fd.get('child_last')}`
+    };
 
-    // Show success after short delay
-    setTimeout(() => {
-      document.getElementById('reg-form').style.display = 'none';
-      document.getElementById('success-state').style.display = 'block';
-    }, 1200);
+    try {
+      const response = await fetch('https://formspree.io/f/xqeodoeg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        document.getElementById('reg-form').style.display = 'none';
+        document.getElementById('success-state').style.display = 'block';
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Submit Pre-Registration';
+      document.getElementById('form-error').style.display = 'block';
+    }
   });
 </script>
 </body>

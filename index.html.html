@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Registration — Aristotle's Garden</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forest:   #2C4A35;
+    --sage:     #7A9E7E;
+    --parchment:#F5F0E8;
+    --warm-off: #FDFAF4;
+    --ink:      #1E1E1E;
+    --muted:    #6B6B6B;
+    --gold:     #B8965A;
+    --border:   #DDD6C8;
+    --error:    #B85A5A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    background: var(--warm-off);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--forest);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 0%, rgba(184,150,90,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .leaf-accent {
+    font-size: 28px;
+    letter-spacing: 12px;
+    opacity: 0.55;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  header p {
+    margin-top: 14px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .divider-gold {
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+    margin: 18px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── INTRO BAND ── */
+  .intro {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .intro p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 400;
+    color: var(--forest);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .intro p span {
+    font-style: italic;
+  }
+
+  /* ── FORM CARD ── */
+  .form-wrap {
+    max-width: 680px;
+    margin: 48px auto;
+    padding: 0 20px 60px;
+  }
+
+  .form-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: clamp(28px, 5vw, 52px);
+    box-shadow: 0 4px 24px rgba(44,74,53,0.07);
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .form-section + .form-section {
+    margin-top: 36px;
+  }
+
+  /* ── FIELDS ── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .field-row.full { grid-template-columns: 1fr; }
+
+  @media (max-width: 520px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  label .req {
+    color: var(--gold);
+    margin-left: 2px;
+  }
+
+  input, select, textarea {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--warm-off);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 11px 14px;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder, textarea::placeholder { color: #bbb; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(122,158,126,0.15);
+    background: #fff;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A9E7E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+  /* ── CHECKBOX GROUP ── */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink);
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--warm-off);
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .check-item:hover { border-color: var(--sage); background: #fff; }
+
+  .check-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    accent-color: var(--forest);
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .check-item input[type="checkbox"]:focus {
+    outline: 2px solid var(--sage);
+    box-shadow: none;
+  }
+
+  .check-item.selected {
+    border-color: var(--sage);
+    background: rgba(122,158,126,0.08);
+  }
+
+  /* ── RADIO GROUP ── */
+  .radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 420px) {
+    .radio-group { grid-template-columns: 1fr; }
+  }
+
+  .radio-card {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--warm-off);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .radio-card:hover { border-color: var(--sage); background: #fff; }
+  .radio-card.selected { border-color: var(--forest); background: rgba(44,74,53,0.05); }
+
+  .radio-card input[type="radio"] { display: none; }
+
+  .radio-card .rc-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .radio-card .rc-sub {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── SUBMIT ── */
+  .submit-wrap {
+    margin-top: 36px;
+    text-align: center;
+  }
+
+  .btn-submit {
+    background: var(--forest);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    padding: 16px 48px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .btn-submit:hover { background: #3a6147; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: var(--sage); cursor: not-allowed; }
+
+  .submit-note {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SUCCESS ── */
+  #success-state {
+    display: none;
+    text-align: center;
+    padding: 52px 24px;
+  }
+
+  #success-state .success-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+
+  #success-state h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--forest);
+    margin-bottom: 12px;
+  }
+
+  #success-state p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* ── ERROR MSG ── */
+  .error-msg {
+    display: none;
+    color: var(--error);
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .field.has-error input,
+  .field.has-error select,
+  .field.has-error textarea {
+    border-color: var(--error);
+  }
+
+  .field.has-error .error-msg { display: block; }
+
+  /* ── FORM-LEVEL ERROR ── */
+  #form-error {
+    display: none;
+    background: #fdf0f0;
+    border: 1px solid var(--error);
+    border-radius: 3px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--error);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    border-top: 1px solid var(--border);
+  }
+
+  footer a { color: var(--sage); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="leaf-accent">🌿 🌿 🌿</span>
+  <h1>Aristotle's Garden<br><em>Microschool</em></h1>
+  <p>San Antonio, TX &nbsp;·&nbsp; Fall 2026</p>
+  <div class="divider-gold"></div>
+</header>
+
+<div class="intro">
+  <p>A school for <span>brilliantly different minds.</span><br>
+  Reserve your child's place in our founding cohort.</p>
+</div>
+
+<div class="form-wrap">
+  <div class="form-card">
+
+    <div id="success-state">
+      <div class="success-icon">🌱</div>
+      <h2>You're on the list.</h2>
+      <p>Thank you for pre-registering. We'll be in touch soon with next steps for your family.</p>
+    </div>
+
+    <form id="reg-form" novalidate>
+
+      <div id="form-error">Something went wrong sending your form. Please email us directly at aristotlesgardenma@gmail.com</div>
+
+      <!-- SECTION 1: CHILD -->
+      <div class="form-section">
+        <div class="section-label">About Your Child</div>
+
+        <div class="field-row">
+          <div class="field" id="f-child-first">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="child_first" placeholder="First name" autocomplete="off">
+            <span class="error-msg">Required</span>
+          </div>
+          <div class="field" id="f-child-last">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="child_last" placeholder="Last name" autocomplete="off">
+            <span class="error-msg">Required</span>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="f-child-age">
+            <label>Age <span class="req">*</span></label>
+            <select name="child_age">
+              <option value="">Select age</option>
+              <option>8</option><option>9</option><option>10</option><option>11</option>
+            </select>
+            <span class="error-msg">Required</span>
+          </div>
+          <div class="field" id="f-child-grade">
+            <label>Current Grade <span class="req">*</span></label>
+            <select name="child_grade">
+              <option value="">Select grade</option>
+              <option>2nd (entering 3rd)</option>
+              <option>3rd (entering 4th)</option>
+              <option>4th (entering 5th)</option>
+              <option>5th (entering 6th)</option>
+            </select>
+            <span class="error-msg">Required</span>
+          </div>
+        </div>
+
+        <!-- Learning Profile -->
+        <div class="field" id="f-profile">
+          <label>Learning Profile <span class="req">*</span><br>
+            <span style="font-size:10px;font-weight:300;text-transform:none;letter-spacing:0;color:#aaa;">Select all that apply</span>
+          </label>
+          <div class="checkbox-group" id="profile-group">
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="Gifted / Highly Capable"> Gifted / Highly Capable
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="ADHD"> ADHD
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="Autism Spectrum"> Autism Spectrum
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="Dyslexia / Dysgraphia"> Dyslexia / Dysgraphia
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="Anxiety / Sensory Processing"> Anxiety / Sensory Processing
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="2e (Twice Exceptional)"> 2e (Twice Exceptional)
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="profile" value="Undiagnosed / Exploring"> Undiagnosed / Exploring
+            </label>
+          </div>
+          <span class="error-msg" id="profile-error">Please select at least one</span>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ENROLLMENT -->
+      <div class="form-section">
+        <div class="section-label">Enrollment Preference</div>
+
+        <div class="field" id="f-enrollment">
+          <label>Which enrollment type are you considering? <span class="req">*</span></label>
+          <div class="radio-group" id="enrollment-group">
+            <label class="radio-card" id="rc-full">
+              <input type="radio" name="enrollment" value="Full-Time">
+              <span class="rc-label">Full-Time</span>
+              <span class="rc-sub">Mon–Fri · $12,000/yr<br>TEFA vouchers accepted</span>
+            </label>
+            <label class="radio-card" id="rc-hybrid">
+              <input type="radio" name="enrollment" value="Hybrid">
+              <span class="rc-label">Hybrid</span>
+              <span class="rc-sub">Part-week · $8,400/yr<br>TEFA vouchers accepted</span>
+            </label>
+          </div>
+          <span class="error-msg" id="enrollment-error">Please select an option</span>
+        </div>
+      </div>
+
+      <!-- SECTION 3: PARENT -->
+      <div class="form-section">
+        <div class="section-label">Parent / Guardian</div>
+
+        <div class="field-row">
+          <div class="field" id="f-parent-first">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="parent_first" placeholder="First name" autocomplete="given-name">
+            <span class="error-msg">Required</span>
+          </div>
+          <div class="field" id="f-parent-last">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="parent_last" placeholder="Last name" autocomplete="family-name">
+            <span class="error-msg">Required</span>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="f-email">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+            <span class="error-msg" id="email-error">Valid email required</span>
+          </div>
+          <div class="field" id="f-phone">
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="(000) 000-0000" autocomplete="tel">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: HOW DID YOU HEAR -->
+      <div class="form-section">
+        <div class="section-label">How Did You Hear About Us</div>
+
+        <div class="field field-row full" id="f-referral">
+          <label>How did you find Aristotle's Garden? <span class="req">*</span></label>
+          <select name="referral">
+            <option value="">Select one</option>
+            <option>Word of mouth / friend or family</option>
+            <option>Facebook / social media</option>
+            <option>KaiPod network</option>
+            <option>TEFA / ESA resources</option>
+            <option>Google search</option>
+            <option>School or therapist referral</option>
+            <option>Flyer or event</option>
+            <option>Other</option>
+          </select>
+          <span class="error-msg">Required</span>
+        </div>
+
+        <div class="field field-row full" style="margin-top:16px;">
+          <label>Anything else you'd like us to know?</label>
+          <textarea name="notes" placeholder="Share any questions, context about your child, or anything that would help us prepare…"></textarea>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit" id="submit-btn">Submit Pre-Registration</button>
+        <p class="submit-note">Spaces are limited to 12 students. Submitting does not guarantee enrollment.</p>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<footer>
+  <p>Aristotle's Garden Microschool &nbsp;·&nbsp; San Antonio, TX &nbsp;·&nbsp;
+    <a href="mailto:aristotlesgardenma@gmail.com">aristotlesgardenma@gmail.com</a> &nbsp;·&nbsp;
+    <a href="tel:7262486576">(726) 248-6576</a>
+  </p>
+  <p style="margin-top:6px;">© 2026 Aristotle's Garden. Trilos Method © Wendy Swanson 2026.</p>
+</footer>
+
+<script>
+  // ── Radio card visual toggle ──
+  document.querySelectorAll('.radio-card input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+      radio.closest('.radio-card').classList.add('selected');
+    });
+  });
+
+  // ── Checkbox visual toggle ──
+  document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('.check-item').classList.toggle('selected', cb.checked);
+    });
+  });
+
+  // ── Validation helpers ──
+  function setError(fieldId, show) {
+    const el = document.getElementById(fieldId);
+    if (!el) return;
+    el.classList.toggle('has-error', show);
+  }
+
+  function validateForm(form) {
+    let valid = true;
+
+    const reqFields = [
+      { id: 'f-child-first', selector: 'input[name="child_first"]' },
+      { id: 'f-child-last',  selector: 'input[name="child_last"]' },
+      { id: 'f-child-age',   selector: 'select[name="child_age"]' },
+      { id: 'f-child-grade', selector: 'select[name="child_grade"]' },
+      { id: 'f-parent-first',selector: 'input[name="parent_first"]' },
+      { id: 'f-parent-last', selector: 'input[name="parent_last"]' },
+      { id: 'f-referral',    selector: 'select[name="referral"]' },
+    ];
+
+    reqFields.forEach(({ id, selector }) => {
+      const val = form.querySelector(selector)?.value?.trim();
+      const err = !val;
+      setError(id, err);
+      if (err) valid = false;
+    });
+
+    // Email
+    const email = form.querySelector('input[name="email"]')?.value?.trim();
+    const emailBad = !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    setError('f-email', emailBad);
+    if (emailBad) valid = false;
+
+    // Profile checkboxes
+    const anyProfile = [...form.querySelectorAll('input[name="profile"]')].some(c => c.checked);
+    document.getElementById('f-profile').classList.toggle('has-error', !anyProfile);
+    document.getElementById('profile-error').style.display = anyProfile ? 'none' : 'block';
+    if (!anyProfile) valid = false;
+
+    // Enrollment radio
+    const anyEnroll = form.querySelector('input[name="enrollment"]:checked');
+    document.getElementById('f-enrollment').classList.toggle('has-error', !anyEnroll);
+    document.getElementById('enrollment-error').style.display = anyEnroll ? 'none' : 'block';
+    if (!anyEnroll) valid = false;
+
+    return valid;
+  }
+
+  // ── Build email body ──
+  function buildEmailBody(form) {
+    const fd = new FormData(form);
+    const profiles = [...form.querySelectorAll('input[name="profile"]:checked')].map(c => c.value).join(', ');
+    return `
+NEW PRE-REGISTRATION — Aristotle's Garden
+==========================================
+
+CHILD INFORMATION
+Child Name: ${fd.get('child_first')} ${fd.get('child_last')}
+Age: ${fd.get('child_age')}
+Current Grade: ${fd.get('child_grade')}
+Learning Profile: ${profiles}
+
+ENROLLMENT PREFERENCE
+Type: ${fd.get('enrollment')}
+
+PARENT / GUARDIAN
+Parent Name: ${fd.get('parent_first')} ${fd.get('parent_last')}
+Email: ${fd.get('email')}
+Phone: ${fd.get('phone') || 'Not provided'}
+
+REFERRAL
+How they heard: ${fd.get('referral')}
+
+ADDITIONAL NOTES
+${fd.get('notes') || 'None'}
+
+==========================================
+Submitted via aristotlesgardenma@gmail.com
+    `.trim();
+  }
+
+  // ── Submit handler ──
+  document.getElementById('reg-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    document.getElementById('form-error').style.display = 'none';
+
+    if (!validateForm(this)) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const fd = new FormData(this);
+    const subject = encodeURIComponent(`Pre-Registration: ${fd.get('child_first')} ${fd.get('child_last')}`);
+    const body = encodeURIComponent(buildEmailBody(this));
+    const mailtoLink = `mailto:aristotlesgardenma@gmail.com?subject=${subject}&body=${body}`;
+
+    // Open mailto (works on most devices)
+    window.location.href = mailtoLink;
+
+    // Show success after short delay
+    setTimeout(() => {
+      document.getElementById('reg-form').style.display = 'none';
+      document.getElementById('success-state').style.display = 'block';
+    }, 1200);
+  });
+</script>
+</body>
+</html>
